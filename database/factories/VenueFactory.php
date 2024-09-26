@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use App\Enums\Region;
 use App\Models\Venue;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VenueFactory extends Factory
 {
@@ -25,6 +26,7 @@ class VenueFactory extends Factory
             'city' => $this->faker->city(),
             'country' => $this->faker->country(),
             'postal_code' => $this->faker->postcode(),
+            'region' => $this->faker->randomElement(Region::class),
         ];
     }
 }
