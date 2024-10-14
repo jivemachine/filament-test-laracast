@@ -26,7 +26,7 @@ class ConferenceResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                ->label('Conference')
+                ->label('Conference Name')
                     ->required()
                     ->hint('Here is the hint')
                     ->hintIcon('heroicon-o-rectangle-stack')
