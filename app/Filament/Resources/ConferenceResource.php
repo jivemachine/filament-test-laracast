@@ -6,11 +6,13 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Enums\Region;
 use App\Models\Venue;
+use App\Models\Speaker;
 use Filament\Forms\Form;
 use App\Models\Conference;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ConferenceResource\Pages;
 use App\Filament\Resources\ConferenceResource\RelationManagers;
@@ -61,6 +63,12 @@ class ConferenceResource extends Resource
                     ->relationship('venue', 'name', modifyQueryUsing: function (Builder $query, Forms\Get $get) {
                         return $query->where('region', $get('region'));
                     }),
+                CheckboxList::make('speakers')
+                    ->relationship('speakers', 'name')
+                    ->options(
+                       Speaker::all()->pluck('name', 'id')
+                    )
+                    ->required(),
             ]);
     }
 

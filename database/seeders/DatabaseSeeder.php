@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use App\Models\Venue;
+use App\Models\Speaker;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Venue::factory(200)->create();
+
+        Speaker::factory(25)->create();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
