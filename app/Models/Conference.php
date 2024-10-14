@@ -9,6 +9,7 @@ use App\Models\Venue;
 use App\Models\Speaker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -106,6 +108,28 @@ class Conference extends Model
                     ->editOptionForm(Venue::getForm())
                     ->relationship('venue', 'name', modifyQueryUsing: function (Builder $query, Forms\Get $get) {
                         return $query->where('region', $get('region'));
+                    }),
+            ]),
+
+            Actions::make([
+                Action::make('star')
+                ->label('Fill with factory data')
+                    ->icon('heroicon-m-star')
+                    ->visible(function ($operation) {
+                        if($operation != 'create') {
+                            return false;
+                        }
+
+                        if (! app()->environment('local')) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    // ->requiresConfirmation()
+                    ->action(function ($livewire) {
+                        $data = Conference::factory()->make()->toArray();
+                        $livewire->form->fill($data);
                     }),
             ]),
 
