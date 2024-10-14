@@ -3,15 +3,19 @@
 namespace App\Models;
 
 use App\Enums\Region;
+use Spatie\MediaLibrary\HasMedia;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Venue extends Model
+class Venue extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $casts = [
         'id' => 'integer',
@@ -41,6 +45,10 @@ class Venue extends Model
             Select::make('region')
                 ->enum(Region::class)
                 ->options(Region::class),
+            SpatieMediaLibraryFileUpload::make('images')
+                ->collection('venue-images')
+                ->multiple()
+                ->image()
         ];
     }
 }

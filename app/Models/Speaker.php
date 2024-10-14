@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Conference;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
@@ -30,6 +31,12 @@ class Speaker extends Model
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
+            FileUpload::make('avatar')
+            ->preserveFilenames()
+                ->avatar()
+                ->imageEditor()
+                // ->image()
+                ->maxSize(1024 * 1024 * 10),
             TextInput::make('email')
                 ->email()
                 ->required()
