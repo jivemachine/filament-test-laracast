@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TalkResource\Pages;
-use App\Filament\Resources\TalkResource\RelationManagers;
-use App\Models\Talk;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Talk;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Enums\TalkLength;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\TalkResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\TalkResource\RelationManagers;
 
 class TalkResource extends Resource
 {
@@ -39,21 +43,44 @@ class TalkResource extends Resource
     {
         return $table
             ->columns([
+                // Tables\Columns\TextInputColumn::make('title')
+                //     ->sortable()
+                //     ->rules(['required', 'max:255'])
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('abstract')
-                    ->searchable(),
+                    ->sortable()
+                    ->searchable()
+                    ->description(function (Talk $record) {
+                        return Str::of($record->abstract)->limit(40);
+                    }),
+                Tables\Columns\ImageColumn::make('speaker.avatar')
+                    ->label('Speaker Avatar')
+                    ->circular()
+                    ->defaultImageUrl(function ($record) {
+                        return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' . urlencode($record->speaker->name);
+                }),
+                // Tables\Columns\TextColumn::make('abstract')
+                //     ->wrap(),
                 Tables\Columns\TextColumn::make('speaker.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->searchable(),
+                // Tables\Columns\IconColumn::make('new_talk')->boolean(),
+                Tables\Columns\ToggleColumn::make('new_talk'),
+                TextColumn::make('status')->badge()
+                    ->badge()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ->color(function ($state) {
+                    return $state->getColor();
+                }),
+                IconColumn::make('length')
+                ->icon(function ($state) {
+                    return match($state) {
+                        TalkLength::NORMAL  => 'heroicon-o-megaphone',
+                        TalkLength::LIGHTNING => 'heroicon-o-bolt',
+                        TalkLength::KEYNOTE => 'heroicon-o-key',
+                    };
+                }),
+
             ])
             ->filters([
                 //

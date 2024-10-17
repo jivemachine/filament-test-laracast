@@ -47,6 +47,7 @@ class Venue extends Model implements HasMedia
                 ->options(Region::class),
             SpatieMediaLibraryFileUpload::make('images')
                 ->collection('venue-images')
+                ->imageEditor()
                 ->multiple()
                 ->image()
         ];
