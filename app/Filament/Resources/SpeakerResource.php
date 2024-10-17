@@ -18,6 +18,7 @@ use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\SpeakerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SpeakerResource\RelationManagers;
+use App\Filament\Resources\SpeakerResource\RelationManagers\TalksRelationManager;
 
 class SpeakerResource extends Resource
 {
@@ -118,7 +119,8 @@ class SpeakerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            TalksRelationManager::class,
+            TalksRelationManager::class,
         ];
     }
 
