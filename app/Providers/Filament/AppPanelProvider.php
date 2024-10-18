@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Blade;
+use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Session\Middleware\StartSession;
@@ -29,12 +30,23 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('/')
             ->login()
+            ->registration()
+            ->passwordReset()
+            ->emailVerification()
+            ->brandName('My Great Company')
+            // ->brandLogo()
+            // ->darkModeBrandLogo()
             ->colors([
                 'primary' => Color::Indigo,
                 'gray' => Color::Slate,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                NavigationGroup::make('First Group')->icon('heroicon-o-cake'),
+                NavigationGroup::make('Second Group')->icon('heroicon-o-bolt'),
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])

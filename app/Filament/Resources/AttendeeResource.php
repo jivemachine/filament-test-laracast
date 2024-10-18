@@ -14,12 +14,34 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendeeResource\RelationManagers;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeeChartWidget;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeesStatsWidget;
+use Illuminate\Database\Eloquent\Model;
 
 class AttendeeResource extends Resource
 {
     protected static ?string $model = Attendee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static ?string $navigationIcon = 'heroicon-o-user/-group';
+
+    protected static ?string $navigationGroup = 'First Group';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return Attendee::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'success';
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Conference' => $record->conference->name,
+        ];
+    }
 
     public static function form(Form $form): Form
     {
